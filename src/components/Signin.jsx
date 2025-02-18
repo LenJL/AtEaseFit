@@ -1,4 +1,5 @@
 import background from './bg.jpg'
+import { Link } from "react-router-dom";
 export default function Signin() {
     return (
       <>
@@ -18,7 +19,7 @@ export default function Signin() {
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <h1  className="mx-auto h-10 w-auto">AtEaseFit</h1>
             <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white-900">
-              Sign in to your accountssssssssssssssssss
+              Sign in to your account
             </h2>
           </div>
   
