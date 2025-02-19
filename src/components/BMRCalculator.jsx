@@ -111,10 +111,10 @@ export default function BMRCalculator({ onBack }) {
               Maintenance Calories: {calories} kcal
             </p>
             <p className="text-xl text-green-600 mt-2">
-              To Gain Weight: {calories + 500} kcal
+              To Gain Weight: {calories + 250} kcal
             </p>
             <p className="text-xl text-red-600 mt-2">
-              To Lose Weight: {calories - 500} kcal
+              To Lose Weight: {calories - 250} kcal
             </p>
           </div>
         ) : (
