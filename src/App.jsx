@@ -9,6 +9,7 @@ function App() {
     <Routes>
     <Route path="/AtEaseFit/" element={<Home/>}/>
     <Route path="/Signin" element={<Signin/>} />
+    
     </Routes>
    </Router>
   );
