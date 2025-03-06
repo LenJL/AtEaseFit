@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 
 const navigation = [
   { name: 'Home', href: '/AtEaseFit/' },
-  { name: 'Workout', href: '/workout' },
-  { name: 'Tracker', href: '/tracker' },
+  { name: 'Workout', href: '/WorkoutSpiltNav' },
+  { name: 'Tracker', href: '/Tracker' },
 ];
 
 const NavLink = ({ name, href, className }) => (
