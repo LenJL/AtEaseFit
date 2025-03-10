@@ -23,7 +23,7 @@ function App() {
         <Route path="/Signin" element={<Signin />} />
         <Route path="/WorkoutSpiltNav" element={<WorkoutSpiltNav />} />
         <Route path="/Tracker" element={<Tracker />} />
-        <Route path="/workout-split" element={<WorkoutSpiltNav />} />
+        <Route path="/workout-splitnav" element={<WorkoutSpiltNav />} />
 
         <Route path="/workout-split/male-3" element={<Male3Days />} />
         <Route path="/workout-split/male-4" element={<Male4Days />} />
