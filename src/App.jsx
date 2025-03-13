@@ -4,6 +4,7 @@ import "./styles/tailwind.css";
 import Signin from "./components/Signin";
 import WorkoutSpiltNav from "./components/WorkoutSpiltNav";
 import Tracker from "./components/Tracker";
+import DietComp from "./components/DietComp";
 import Male3Days from "./components/workout-splits/Male3Days";
 import Male4Days from "./components/workout-splits/Male4Days";
 import Male5Days from "./components/workout-splits/Male5Days";
@@ -24,7 +25,7 @@ function App() {
         <Route path="/WorkoutSpiltNav" element={<WorkoutSpiltNav />} />
         <Route path="/Tracker" element={<Tracker />} />
         <Route path="/workout-splitnav" element={<WorkoutSpiltNav />} />
-
+        <Route path="/DietComp" element={<DietComp />} />
         <Route path="/workout-split/male-3" element={<Male3Days />} />
         <Route path="/workout-split/male-4" element={<Male4Days />} />
         <Route path="/workout-split/male-5" element={<Male5Days />} />
