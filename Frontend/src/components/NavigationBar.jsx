@@ -50,7 +50,7 @@ export default function Navigation() {
         </div>
 
         {/* Log in Button */}
-        <NavLink name="Log in →" href="/Login" className="hidden lg:flex text-white" />
+      
 
         <NavLink
           name="Log in →"
