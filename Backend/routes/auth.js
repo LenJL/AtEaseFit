@@ -4,7 +4,7 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 // @route   POST /signup
-router.post('/Signin', async (req, res) => {
+router.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
@@ -20,17 +20,22 @@ router.post('/Signin', async (req, res) => {
 
         res.status(201).json({ token, user: { id: newUser._id, name: newUser.name, email: newUser.email } });
     } catch (error) {
+        console.error('Signup error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
 
 // @route   POST /login
-router.post('/Login', async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ message: 'Invalid credentials' });
+
+        if (!user.password) {
+            return res.status(400).json({ message: 'Please log in using Google' });
+        }
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
@@ -42,6 +47,7 @@ router.post('/Login', async (req, res) => {
 
         res.status(200).json({ token, user: { id: user._id, name: user.name, email: user.email } });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -57,7 +63,8 @@ router.post('/google', async (req, res) => {
             user = new User({
                 name,
                 email,
-                googleId,
+                googleId, 
+                password: undefined // Skip password for Google-authenticated users
             });
             await user.save();
         }

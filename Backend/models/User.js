@@ -1,22 +1,28 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-}, { timestamps: true });
+    password: { type: String }, // Optional for Google auth
+    googleId: { type: String },
+  },
+  { timestamps: true }
+);
 
-// Hash the password before saving
-userSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) return next();
+// Hash the password before saving (only if password exists)
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password') && this.password) {
     this.password = await bcrypt.hash(this.password, 10);
-    next();
+  }
+  next();
 });
 
-// Compare password
-userSchema.methods.comparePassword = async function(enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
+// Compare password (only for manual login)
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  if (!this.password) return false; // Skip if no password (Google login)
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 const User = mongoose.model('User', userSchema);
