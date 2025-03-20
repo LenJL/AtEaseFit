@@ -34,6 +34,7 @@ export default function Male3Days() {
         { name: "Deadlift (3*15)", gif: "DLift.gif" },
         { name: "Seated Rows (3*15)", gif: "SROWS.gif" },
         { name: "Seated Incline Bicep Curl (3*15)", gif: "inclineBC.gif" },
+        { name: "Rear Dealts Fly (3*15)", gif: "Rev_pec_fly.gif" },
         { name: "Preacher Curl (3*15)", gif: "preacher.gif" },
       ],
     },
