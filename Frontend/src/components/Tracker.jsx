@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import Navigation from "./NavigationBar";
+"use client";
+import { useState } from "react";
 import { motion } from "framer-motion";
+import Navigation from "./NavigationBar";
 import PopUp from "./PopUp";
-import Bg from "./bg.jpg";
 
 export default function Tracker() {
   const [showModal, setShowModal] = useState(false);
@@ -30,20 +30,32 @@ export default function Tracker() {
   };
 
   return (
-    <div
-      className="bg-cover bg-center bg-no-repeat min-h-screen relative"
-      style={{ backgroundImage: `url(${Bg})` }}
-    >
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/40"></div>
+    <div className="relative min-h-screen flex items-center justify-center">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/AtEaseFit/BGAtease.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
-      {/* Navbar Component */}
+      {/* Premium Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-gray-900"></div>
+
       <Navigation />
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <div className="p-6 bg-white rounded-lg shadow-lg max-w-md w-full">
-          <h2 className="text-xl font-bold text-center">
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 w-full max-w-lg">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full p-6 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-gray-700"
+        >
+          <h2 className="text-2xl font-bold text-white text-center mb-4">
             Workout & Diet Tracker
           </h2>
 
@@ -52,13 +64,13 @@ export default function Tracker() {
             placeholder="Enter weight (kg)"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
-            className="w-full px-4 py-2 mt-3 border rounded-md"
+            className="w-full p-2 border border-gray-600 bg-gray-800 text-white rounded-lg mb-3 focus:ring-2 focus:ring-gray-400 transition"
           />
 
           <select
             value={workout}
             onChange={(e) => setWorkout(e.target.value)}
-            className="w-full px-4 py-2 mt-3 border rounded-md"
+            className="w-full p-2 border border-gray-600 bg-gray-800 text-white rounded-lg mb-3 focus:ring-2 focus:ring-gray-400 transition"
           >
             <option value="">Select Workout</option>
             <option value="Push">Push</option>
@@ -71,13 +83,13 @@ export default function Tracker() {
           </select>
 
           <div className="flex justify-between items-center mt-3">
-            <span>Maintained Diet?</span>
+            <span className="text-white">Maintained Diet?</span>
             <div className="flex gap-4">
               <button
                 className={`px-4 py-2 rounded ${
                   dietMaintained === true
                     ? "bg-green-500 text-white"
-                    : "bg-gray-200"
+                    : "bg-gray-700"
                 }`}
                 onClick={() => setDietMaintained(true)}
               >
@@ -87,7 +99,7 @@ export default function Tracker() {
                 className={`px-4 py-2 rounded ${
                   dietMaintained === false
                     ? "bg-red-500 text-white"
-                    : "bg-gray-200"
+                    : "bg-gray-700"
                 }`}
                 onClick={() => setDietMaintained(false)}
               >
@@ -96,22 +108,33 @@ export default function Tracker() {
             </div>
           </div>
 
-          <button
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
             onClick={handleAddEntry}
-            className="w-full bg-blue-500 text-white py-2 mt-4 rounded-lg hover:bg-blue-600"
+            className="w-full bg-gradient-to-r from-[#4c1d95] to-[#6d28d9] text-white py-2 mt-4 rounded-lg hover:opacity-90 shadow-lg transition"
           >
             Add Entry
-          </button>
+          </motion.button>
 
           {/* Previous Entries */}
           <div className="mt-6">
-            <h3 className="text-lg font-semibold">Previous Entries</h3>
+            <h3 className="text-lg font-semibold text-white">
+              Previous Entries
+            </h3>
             {entries.length === 0 ? (
-              <p className="text-gray-500">No entries yet.</p>
+              <p className="text-gray-400">No entries yet.</p>
             ) : (
               <ul className="mt-2 space-y-2">
                 {entries.map((entry, index) => (
-                  <li key={index} className="p-3 border rounded-md shadow-sm">
+                  <motion.li
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="p-3 border border-gray-600 rounded-md shadow-sm bg-gray-900 text-white"
+                  >
                     <p>
                       <strong>Date:</strong> {entry.date}
                     </p>
@@ -127,12 +150,12 @@ export default function Tracker() {
                         ? "✔️ Maintained"
                         : "❌ Not Maintained"}
                     </p>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Show PopUp when state is true */}

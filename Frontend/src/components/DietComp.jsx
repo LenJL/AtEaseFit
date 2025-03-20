@@ -1,15 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Navigation from "./NavigationBar";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import Bg from "./bg.jpg";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function DietComp() {
   const [calories, setCalories] = useState("");
   const [macroData, setMacroData] = useState(null);
+  const [chartKey, setChartKey] = useState(0);
+  const chartRef = useRef(null); // Reference for chart instance
 
   const handleCalculate = () => {
     const totalCalories = parseFloat(calories);
@@ -18,80 +19,124 @@ export default function DietComp() {
       return;
     }
 
-    // Assumed macro ratio: 50% Carbs, 30% Protein, 15% Fats, 5% Fiber
     const carbs = (totalCalories * 0.5) / 4;
     const protein = (totalCalories * 0.3) / 4;
     const fats = (totalCalories * 0.15) / 9;
     const fiber = (totalCalories * 0.05) / 4;
 
     setMacroData({ carbs, protein, fats, fiber });
+    setChartKey((prevKey) => prevKey + 1);
   };
 
-  return (
-    <div
-      className="bg-cover bg-center bg-no-repeat min-h-screen relative"
-      style={{ backgroundImage: `url(${Bg})` }}
-    >
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
+  // Function to create gradient colors for chart segments
+  const getGradient = (ctx, area, color1, color2) => {
+    const gradient = ctx.createLinearGradient(
+      area.left,
+      area.top,
+      area.right,
+      area.bottom
+    );
+    gradient.addColorStop(0, color1);
+    gradient.addColorStop(1, color2);
+    return gradient;
+  };
 
-      {/* Navigation Bar */}
+  useEffect(() => {
+    if (chartRef.current && macroData) {
+      const chartInstance = chartRef.current;
+      const ctx = chartInstance.ctx;
+      const area = chartInstance.chartArea;
+
+      if (!ctx || !area) return;
+
+      // Apply gradient colors dynamically
+      const gradients = [
+        getGradient(ctx, area, "#FF6384", "#FF4F70"), // Carbs
+        getGradient(ctx, area, "#36A2EB", "#2E8BDA"), // Protein
+        getGradient(ctx, area, "#FFCE56", "#E6B800"), // Fats
+        getGradient(ctx, area, "#4BC0C0", "#3FAF9B"), // Fiber
+      ];
+
+      chartInstance.data.datasets[0].backgroundColor = gradients;
+      chartInstance.update();
+    }
+  }, [macroData, chartKey]);
+
+  return (
+    <div className="relative min-h-screen flex items-center justify-center">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/AtEaseFit/BGAtease.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Premium Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 to-gray-900"></div>
+
       <Navigation />
 
-      {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <div className="p-6 bg-white rounded-lg shadow-lg max-w-md w-full text-center">
-          <h1 className="text-2xl font-bold mb-6 text-gray-800">
-            Diet Composition
-          </h1>
+      {/* Content Box */}
+      <div className="relative z-10 bg-white/10 backdrop-blur-md p-6 rounded-2xl shadow-lg w-full max-w-md flex flex-col items-center border border-gray-700">
+        <h1 className="text-2xl font-bold text-white text-center mb-4">
+          Diet Composition
+        </h1>
 
-          <input
-            type="number"
-            placeholder="Enter daily calorie intake"
-            value={calories}
-            onChange={(e) => setCalories(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md text-black"
-          />
+        {/* Input for Calories */}
+        <input
+          type="number"
+          placeholder="Enter daily calorie intake"
+          value={calories}
+          onChange={(e) => setCalories(e.target.value)}
+          className="w-full p-2 border border-gray-600 bg-gray-800 text-white rounded-lg mb-3 focus:ring-2 focus:ring-gray-400 transition"
+        />
 
-          <button
-            onClick={handleCalculate}
-            className="w-full bg-blue-600 text-white py-2 mt-4 rounded-lg hover:bg-blue-500"
-          >
-            Calculate
-          </button>
+        {/* Calculate Button */}
+        <button
+          onClick={handleCalculate}
+          className="w-full mt-4 px-5 py-2 text-white rounded-lg bg-gradient-to-r from-[#4c1d95] to-[#6d28d9] hover:opacity-90 shadow-lg transition"
+        >
+          Calculate
+        </button>
 
-          {macroData && (
-            <div className="mt-6">
-              <Pie
-                data={{
-                  labels: ["Carbs (g)", "Protein (g)", "Fats (g)", "Fiber (g)"],
-                  datasets: [
-                    {
-                      data: [
-                        macroData.carbs,
-                        macroData.protein,
-                        macroData.fats,
-                        macroData.fiber,
-                      ],
-                      backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56",
-                        "#4BC0C0",
-                      ],
-                      hoverBackgroundColor: [
-                        "#FF4F70",
-                        "#2E8BDA",
-                        "#E6B800",
-                        "#3FAF9B",
-                      ],
-                    },
-                  ],
-                }}
-              />
-            </div>
-          )}
-        </div>
+        {/* Pie Chart Display */}
+        {macroData && (
+          <div className="mt-6 w-full">
+            <Pie
+              key={chartKey}
+              ref={chartRef}
+              data={{
+                labels: ["Carbs (g)", "Protein (g)", "Fats (g)", "Fiber (g)"],
+                datasets: [
+                  {
+                    data: [
+                      macroData.carbs,
+                      macroData.protein,
+                      macroData.fats,
+                      macroData.fiber,
+                    ],
+                    backgroundColor: [
+                      "#FF6384",
+                      "#36A2EB",
+                      "#FFCE56",
+                      "#4BC0C0",
+                    ], // Initial colors (overwritten by gradients)
+                    hoverBackgroundColor: [
+                      "#FF4F70",
+                      "#2E8BDA",
+                      "#E6B800",
+                      "#3FAF9B",
+                    ],
+                  },
+                ],
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
