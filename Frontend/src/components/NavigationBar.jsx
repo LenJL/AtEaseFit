@@ -49,9 +49,6 @@ export default function Navigation() {
           ))}
         </div>
 
-        {/* Log in Button */}
-      
-
         <NavLink
           name="Log in →"
           href="/signin"
@@ -80,7 +77,11 @@ export default function Navigation() {
                 className="block py-2 text-gray-900 hover:bg-gray-50"
               />
             ))}
-            <NavLink name="Log in" href="/Login" className="block py-2.5 text-gray-900 hover:bg-gray-50" />
+            <NavLink
+              name="Log in"
+              href="/Login"
+              className="block py-2.5 text-gray-900 hover:bg-gray-50"
+            />
             <NavLink
               name="Log in"
               href="/signin"

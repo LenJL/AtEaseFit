@@ -36,6 +36,8 @@ export default function Female3Days() {
           name: "Dumbbell Bicep Curls (3*15)",
           gif: "DBCurl.gif",
         },
+        { name: "Rear Dealts Fly (3*15)", gif: "Rev_pec_fly.gif" },
+
         { name: "Preacher Curls (3*15)", gif: "preacher.gif" },
       ],
     },
