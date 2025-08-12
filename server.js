@@ -11,6 +11,11 @@
     app.use(express.json());
     app.use('/api/auth', authroutes);
     app.use("/uploads", express.static("uploads"));
+    app.get('/', (req, res) => {
+        res.send('Backend is running 🚀');
+});
+  
+
 
 
     const PORT = process.env.PORT || 5000;
